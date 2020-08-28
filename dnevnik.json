@@ -1,0 +1,40 @@
+{
+    "albumi": [
+        {
+            "naslov": "Red",
+            "izvajalec": "Taylor Swift",
+            "datum vnosa": "2020-08-29",
+            "leto izdaje": 2012,
+            "zvrst": "pop",
+            "ocena": 8,
+            "opis": "Vrhunec album doseže v pesmi All too well. Posebno se me je dotaknilo besedilo: \"so casually cruel in the name of being honest\""
+        },
+        {
+            "naslov": "Two hands",
+            "izvajalec": "Big Thief",
+            "datum vnosa": "2020-08-29",
+            "leto izdaje": 2019,
+            "zvrst": "indie",
+            "ocena": 8,
+            "opis": "forgotten eyes: \"forgotten tongue is the language of love\""
+        },
+        {
+            "naslov": "I forget where we were",
+            "izvajalec": "Ben Howard",
+            "datum vnosa": "2020-08-29",
+            "leto izdaje": 2016,
+            "zvrst": "folk",
+            "ocena": 8,
+            "opis": "sosledje pesmi End of the affair, Evergreen in Conrad"
+        },
+        {
+            "naslov": "Otis Blue/Otis Redding Sings Soul",
+            "izvajalec": "Otis Redding",
+            "datum vnosa": "2020-08-29",
+            "leto izdaje": 2016,
+            "zvrst": "soul",
+            "ocena": 8,
+            "opis": "Na albumu je veliko priredb. Tiste, ki so originalne, pa so v kasnejših letih postale priredbe. Iztopa pesem Respet"
+        }
+    ]
+}

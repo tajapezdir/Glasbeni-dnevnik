@@ -1,12 +1,15 @@
 from model import Dnevnik
 from datetime import date
+import json
+
+JSON_DATOTEKA = 'dnevnik.json'
 
 prvi_dnevnik = Dnevnik()
 
 prvi_dnevnik.nov_album(
     'Red',
     'Taylor Swift',
-    date.today,
+    date.today(),
     2012,
     'pop',
     8,
@@ -16,7 +19,7 @@ prvi_dnevnik.nov_album(
 prvi_dnevnik.nov_album(
     'Two hands',
     'Big Thief',
-    date.today,
+    date.today(),
     2019,
     'indie',
     8,
@@ -26,7 +29,7 @@ prvi_dnevnik.nov_album(
 prvi_dnevnik.nov_album(
     'I forget where we were',
     'Ben Howard',
-    date.today,
+    date.today(),
     2016,
     'folk',
     8,
@@ -36,12 +39,17 @@ prvi_dnevnik.nov_album(
 prvi_dnevnik.nov_album(
     'Otis Blue/Otis Redding Sings Soul',
     'Otis Redding',
-    date.today,
+    date.today(),
     2016,
     'soul',
     8,
     'Na albumu je veliko priredb. Tiste, ki so originalne, pa so v kasnejših letih postale priredbe. Iztopa pesem Respet'
 )
 
-print(prvi_dnevnik.seznam_albumov)
-print([album.naslov for album in prvi_dnevnik.seznam_albumov])
+prvi_dnevnik.shrani_stanje(JSON_DATOTEKA)
+
+print(prvi_dnevnik.stevilo_albumov())
+
+for album in prvi_dnevnik.seznam_albumov:
+    print(album.izvajalec + ' - ' + album.naslov)
+
