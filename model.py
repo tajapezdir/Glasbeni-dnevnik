@@ -1,3 +1,10 @@
+
+seznam_zanrov = []
+with open('glasbene-zvrsti.txt', encoding='UTF-8') as datoteka:
+    for zvrst in datoteka:
+        seznam_zanrov.append(zvrst.strip())
+    
+
 class Dnevnik:
     def __init__(self):
         self.seznam_albumov = []   
@@ -6,8 +13,6 @@ class Dnevnik:
         nov = Album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, self)
         self.seznam_albumov.append(nov)
         return nov
-    
-
 
 class Album:
     def __init__(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, dnevnik):        
@@ -19,4 +24,5 @@ class Album:
         self.ocena = ocena
         self.opis = opis
         self.dnevnik = dnevnik
+
 
