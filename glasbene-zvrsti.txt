@@ -1,16 +1,22 @@
-klasična glasba
+pop
+rock
+R&B
+hip hop
+techno
+alternative
 jazz
 blues
 soul
 folk
-country
-rock
-pop
-metal
 punk
+metal
+country
 reggae
-techno
-hip hop
-R&B
-alternitive
+klasična glasba
 indie
+
+
+
+
+
+

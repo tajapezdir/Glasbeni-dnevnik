@@ -4,6 +4,9 @@ seznam_zanrov = []
 with open('glasbene-zvrsti.txt', encoding='UTF-8') as datoteka:
     for zvrst in datoteka:
         seznam_zanrov.append(zvrst.strip())
+
+seznam_ocen = list(range(1, 11))
+
     
 
 class Dnevnik:
@@ -121,7 +124,7 @@ class Dnevnik:
     
     @classmethod
     def nalozi_stanje(cls, ime_datoteke):
-        with open(ime_datoteke) as datoteka:
+        with open(ime_datoteke, encoding='UTF-8') as datoteka:
             slovar_iz_json = json.load(datoteka)
         return cls.nalozi_iz_jsona(slovar_iz_json)
 
