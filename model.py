@@ -15,6 +15,7 @@ class Dnevnik:
         self.seznam_naslovov = []
         self.seznam_izvajalcev = []
         self._seznam_letnic = []
+        self._slovar_ocen = {}
         self._izvajalci_z_naslovi = {} # slovar oblike {(izvajalec, naslov): Album}
 
     # def st_ponovljenih(self, izvajalec, naslov):
@@ -40,6 +41,7 @@ class Dnevnik:
         self._izvajalci_z_naslovi[(izvajalec, naslov)] = nov_album
         self._seznam_letnic.append(leto_izdaje) 
         self.seznam_albumov.append(nov_album)
+        self._slovar_ocen[ocena] = self._slovar_ocen.get(ocena, 0) + 1 
         return nov_album
     
     def stevilo_albumov(self):
@@ -47,6 +49,15 @@ class Dnevnik:
         for _ in self.seznam_albumov:
             stevilo += 1
         return stevilo
+
+    def povprecna_ocena(self):
+        vsota = 0
+        n = 0
+        for ocena, st in self._slovar_ocen.items():
+            n += st
+            vsota += ocena * st
+        return round(vsota / n, 1)
+                                        
 
     def sortiraj_po_abecedi(self): # moram še izboljšati, zaenkrat sortira samo po imenih izvajalcev
         seznam_po_abecedi = []

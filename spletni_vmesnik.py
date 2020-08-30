@@ -8,7 +8,6 @@ JSONOVA_DATOTEKA = 'dnevnik.json'
 
 prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
 
-
 # GET DEKORATORJI
 
 @bottle.get('/')
