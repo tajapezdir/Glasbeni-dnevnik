@@ -33,31 +33,17 @@
 
 <b> Dodaj nov album</b>
 <form action="/dodaj-album/" method="POST">
-    <label for="izvajalec"> izvajalec: </label>
-    <input type="text" id="izvajalec" name="izvajalec">
-
-    <label for="naslov"> naslov: </label>
-    <input type="text" id="naslov" name="naslov">
-
-    <label for="izvajalec"> leto izdaje: </label>
-    <input type="text" id="leto izdaje" name="leto izdaje">
-
-    <label for="zvrst">glasbena zvrst:</label>
-    <select name="zvrst" id="zvrst">
-        % for zvrst in zvrsti:
-        <option value="{{zvrst}}">{{zvrst}}</option>
-        %end
-    </select>
-    <br><br>
-
-    <label for="ocena">ocena:</label>
-    <select name="ocena" id="zvrst">
-        % for ocena in ocene:
-        <option value="{{ocena}}">{{ocena}}</option>
-        %end
-    </select>
-    <br><br>
-
-    <label for="izvajalec"> opis: </label>: <input type="text" name="opis">
+    % include('_izberi_naslov.html', id='izvajalec', oznaka='izvajalec')
+    <br> 
+    % include('_izberi_naslov.html', id='naslov', oznaka='naslov') 
+    <br>
+    % include('_izberi_naslov.html', id='leto izdaje', oznaka='leto izdaje')
+    <br>
+    % include('_izberi_zvrst.html', id='zvrst', oznaka='glasbena zvrst') 
+    <br>    
+    % include('_izberi_oceno.html', id='ocena', oznaka='ocena') 
+    <br>
+    <label for="izvajalec"> opis: </label>: <input type="text" name="opis"> 
+    <br>
     <input type="submit" value="nov album">
 </form>
