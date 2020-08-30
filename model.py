@@ -10,13 +10,30 @@ class Dnevnik:
     def __init__(self):
         self.seznam_albumov = []
         self.seznam_naslovov = []
+        self.seznam_izvajalcev = []
         self._seznam_letnic = []
         self._izvajalci_z_naslovi = {} # slovar oblike {(izvajalec, naslov): Album}
-  
+
+    # def st_ponovljenih(self, izvajalec, naslov):
+    #     st = 0
+    #     for album in self.seznam_albumov:
+    #         if naslov in album.naslov:
+    #             if izvajalec == album.izvajalec:
+    #                 st += 1
+    #     return st 
+
+    def preveri_album(self, izvajalec, naslov):
+        if (izvajalec, naslov) in self._izvajalci_z_naslovi:
+            # stevilo = self.st_ponovljenih(izvajalec, naslov)
+            raise ValueError(
+                f'Ta album ste že vnesli'
+            )
    
     def nov_album(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis):
+        self.preveri_album(izvajalec, naslov)
         nov_album = Album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, self)
         self.seznam_naslovov.append(naslov)
+        self.seznam_izvajalcev.append(izvajalec)
         self._izvajalci_z_naslovi[(izvajalec, naslov)] = nov_album
         self._seznam_letnic.append(leto_izdaje) 
         self.seznam_albumov.append(nov_album)
@@ -28,27 +45,47 @@ class Dnevnik:
             stevilo += 1
         return stevilo
 
-    def sortiraj_po_avtorju(self):
-        return sorted(self.seznam_albumov)    
+    def sortiraj_po_abecedi(self): # moram še izboljšati, zaenkrat sortira samo po imenih izvajalcev
+        seznam_po_abecedi = []
+        if len(self.seznam_albumov) == 0:
+            raise ValueError('Vnesli niste še nobenega albuma')        
+        for izvajalec in sorted(self.seznam_izvajalcev):
+            for album in self.seznam_albumov:
+                if izvajalec == album.izvajalec:
+                    seznam_po_abecedi.append(album)
+        return seznam_po_abecedi
+            
 
     def sortiraj_po_letu_izdaje(self):
         seznam_po_letnicah = []
-        for letnica in self._seznam_letnic.sort():
-            for album in self.seznam_albumov.sort():
+        if len(self.seznam_albumov) == 0:
+            raise ValueError('Vnesli niste še nobenega albuma')
+        for letnica in sorted(self._seznam_letnic):
+            for album in self.seznam_albumov:
                 if letnica == album.leto_izdaje:
                     seznam_po_letnicah.append(album)
         return seznam_po_letnicah
 
     def sortiraj_po_zanru(self, zvrst):
         seznam_po_zanru = []
-        for album in self.seznam_albumov.sort():
+        if len(self.seznam_albumov) == 0:
+            raise ValueError('Vnesli niste še nobenega albuma')
+        for album in self.seznam_albumov:
             if zvrst == album.zvrst:
                 seznam_po_zanru.append(album)
         return seznam_po_zanru
 
+    def sortiraj_po_izvajalcu(self, izvajalec):
+        seznam_po_izvajalcu = []
+        if len(self.seznam_albumov) == 0:
+            raise ValueError('Vnesli niste še nobenega albuma')  
+        for album in self.seznam_albumov:
+            if izvajalec == album.izvajalec:
+                seznam_po_izvajalcu.append(album)
+        return seznam_po_izvajalcu        
+
     def izbrisi_album(self):
         pass
-
 
     def slovar_v_json(self):
         return {
@@ -98,6 +135,9 @@ class Album:
         self.ocena = ocena
         self.opis = opis
         self.dnevnik = dnevnik
+
+    def __str__(self):
+        return f'{self.izvajalec}: {self.naslov}, izdan leta {self.leto_izdaje}'
 
     def __lt__(self, other):
         if self.izvajalec == other.izvajalec:
