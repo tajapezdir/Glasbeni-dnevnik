@@ -1,7 +1,7 @@
 %rebase('osnova.html')
 
 <b>
-<pre>
+    <pre>
     ______  ____    ____    ______  ______  ______  ____   _  ____  
     |   ___||    |  |    \  |   ___||      >|   ___||    \ | ||    | 
     |   |  ||    |_ |     \  `-.`-. |     < |   ___||     \| ||    | 
@@ -18,15 +18,46 @@
 <b> ALBUMI</b>
 <p> število albumov: {{dnevnik.stevilo_albumov()}} </p>
 <ul>
-    % for album in dnevnik.seznam_albumov:
-    <li><p>
-        <b> {{(album.datum)}}:  {{album.izvajalec}} - {{album.naslov}} </b><br>
-        {{album.leto_izdaje}} <br>
-        ocena: {{album.ocena}} / 10 <br>
-        kratek opis: {{album.opis}} 
+    % for album in dnevnik.seznam_albumov[::-1] :
+    <li>
+        <p>
+            <b> {{(album.datum)}}: {{album.izvajalec}} - {{album.naslov}} </b><br>
+            {{album.leto_izdaje}} <br>
+            {{album.zvrst}} <br>
+            ocena: {{album.ocena}} / 10 <br>
+            kratek opis: {{album.opis}}
         </p>
-    </li>    
+    </li>
     % end
 </ul>
 
 <b> Dodaj nov album</b>
+<form action="/dodaj-album/" method="POST">
+    <label for="izvajalec"> izvajalec: </label>
+    <input type="text" id="izvajalec" name="izvajalec">
+
+    <label for="naslov"> naslov: </label>
+    <input type="text" id="naslov" name="naslov">
+
+    <label for="izvajalec"> leto izdaje: </label>
+    <input type="text" id="leto izdaje" name="leto izdaje">
+
+    <label for="zvrst">glasbena zvrst:</label>
+    <select name="zvrst" id="zvrst">
+        % for zvrst in zvrsti:
+        <option value="{{zvrst}}">{{zvrst}}</option>
+        %end
+    </select>
+    <br><br>
+
+    <label for="ocena">ocena:</label>
+    <select name="ocena" id="zvrst">
+        % for ocena in ocene:
+        <option value="{{ocena}}">{{ocena}}</option>
+        %end
+    </select>
+    <br><br>
+
+    <label for="izvajalec"> opis: </label>: <input type="text" name="opis">
+    <input type="submit" value="nov album">
+</form>
