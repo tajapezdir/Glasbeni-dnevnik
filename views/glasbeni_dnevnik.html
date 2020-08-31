@@ -1,0 +1,87 @@
+% rebase('osnova.html', izbrani_zavihek='dnevnik')
+
+<div class="columns">
+    <div class="column is-one-quarter">
+
+        <nav class="panel">
+            <p class="panel-heading">
+                <i class="fas fa-sort"></i>
+                Sortiraj po:
+            </p>
+            <div class="panel-block">
+                <ul class="menu-list">
+                    <li><a>datumu vnosa</a></li>
+                    <li><a>abecedi</a></li>
+                    <li><a>glasbeni zvrsti</a></li>
+                    <li><a>avtorju</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <nav class="panel">
+            <p class="panel-heading">
+                <i class="far fa-plus-square"></i>
+                <b>Dodaj nov album</b>
+            </p>
+
+            <div class="panel-block">
+                <form action="/dodaj-album/" method="POST">
+
+                    <div class="field">
+                        % include('_izberi_naslov.html', ime='izvajalec')
+                    </div>
+                    <div class="field">
+                        % include('_izberi_naslov.html', ime='naslov')
+                    </div>
+                    <div class="field">
+                        % include('_izberi_naslov.html', ime='leto izdaje')
+                    </div>
+
+                    <div class="field">
+                        % include('_izberi_zvrst.html', ime='zvrst')
+                    </div>
+
+                    <div class="field">
+                        % include('_izberi_zvrst.html', ime='ocena')
+                    </div>
+
+                    <div class="field">
+                        <label class="label">opis</label>
+                        <div class="control">
+                          <textarea class="textarea" name="opis" placeholder="besedilo"></textarea>
+                        </div>
+                      </div>
+
+                    <div class="field">
+                        <div class="control">
+                          <button class="button is-link">nov album</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </nav>
+    </div>
+
+    <div class="column">
+        <div class="container">
+            <div class="notification has-background-grey-lighter">
+                <b> ALBUMI</b>
+                <p> število albumov: {{dnevnik.stevilo_albumov()}} </p>
+                <p> Povprečna ocena: {{dnevnik.povprecna_ocena()}} </p>
+            </div>
+        </div>
+        % for album in dnevnik.seznam_albumov[::-1] :
+        <div class="content has-background-white-ter">
+            <ul>
+                <li>
+                    <p>
+                        <b>{{album.izvajalec}}: {{album.naslov}} </b> ({{(album.datum)}}) <br>
+                        {{album.leto_izdaje}} - {{album.zvrst}} <br>
+                        ocena: {{album.ocena}} / 10 <br>
+                        opis: {{album.opis}}
+                    </p>
+                </li>
+            </ul>
+        </div>
+        % end
+    </div>

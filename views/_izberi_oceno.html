@@ -1,7 +1,11 @@
-<label for="{{id}}">{{oznaka}}:</label>
+<label class="label">ocena</label>
 
-<select name="{{id}}" id="{{id}}">
-    % for ocena in ocene:
-    <option value="{{ocena}}">{{ocena}}</option>
-    %end
-</select>
+<div class="control">
+    <div class="select">
+        <select name="{{ime}}">
+            % for ocena in ocene:
+            <option>{{ocena}}</option>
+            % end
+        </select>
+    </div>
+</div>

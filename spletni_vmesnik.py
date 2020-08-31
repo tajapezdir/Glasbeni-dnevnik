@@ -11,9 +11,26 @@ prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
 # GET DEKORATORJI
 
 @bottle.get('/')
-def zacetna_stran():
-    return bottle.template('zacetna_stran.html', dnevnik=prvi_dnevnik, zvrsti=seznam_zanrov, ocene=seznam_ocen)
+def osnovna_stran():
+    bottle.redirect('/dnevnik/')
 
+@bottle.get('/dnevnik/')
+def zacetna_stran():
+    return bottle.template(
+        'glasbeni_dnevnik.html', 
+        dnevnik=prvi_dnevnik, 
+        zvrsti=seznam_zanrov, 
+        ocene=seznam_ocen
+    )
+
+@bottle.get('/analiza/')
+def analiza():
+    return bottle.template('analiza.html')
+
+@bottle.get('/info/')
+def info():
+    return bottle.template('info.html')
+    
 # POST DEKORATORJI
 
 @bottle.post('/dodaj-album/')
