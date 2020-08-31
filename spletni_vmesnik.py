@@ -8,6 +8,15 @@ JSONOVA_DATOTEKA = 'dnevnik.json'
 
 prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
 
+# POMOŽNE FUNKCIJE
+
+def _preveri_leto_izdaje(niz):
+    try:
+        int(niz)
+    except:
+        raise ValueError(f'Pri letu izdaje morate vnesti število!')
+        
+
 # GET DEKORATORJI
 
 @bottle.get('/')
@@ -35,6 +44,7 @@ def info():
 
 @bottle.post('/dodaj-album/')
 def nov_album():
+    _preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
     naslov = bottle.request.forms.getunicode('naslov')
     izvajalec = bottle.request.forms.getunicode('izvajalec')
     datum = date.today() 

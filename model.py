@@ -12,10 +12,9 @@ seznam_ocen = list(range(1, 11))
 class Dnevnik:
     def __init__(self):
         self.seznam_albumov = []
-        self.seznam_naslovov = []
         self.seznam_izvajalcev = []
         self._seznam_letnic = []
-        self._slovar_ocen = {}
+        self._slovar_ocen = {} #slovar oblike {ocena: stevilo albumov s to oceno}
         self._izvajalci_z_naslovi = {} # slovar oblike {(izvajalec, naslov): Album}
 
     # def st_ponovljenih(self, izvajalec, naslov):
@@ -26,17 +25,21 @@ class Dnevnik:
     #                 st += 1
     #     return st 
 
-    def preveri_album(self, izvajalec, naslov):
-        if (izvajalec, naslov) in self._izvajalci_z_naslovi:
+    def preveri_album(self, izvajalec, naslov, opis):
+        if izvajalec == '' or naslov == '' or opis == '':
+            raise ValueError(
+                f'Izpolniti morate vsa polja'
+            )     
+        elif (izvajalec, naslov) in self._izvajalci_z_naslovi:
             # stevilo = self.st_ponovljenih(izvajalec, naslov)
             raise ValueError(
                 f'Ta album ste že vnesli'
             )
+        
    
-    def nov_album(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis):
-        self.preveri_album(izvajalec, naslov)
-        nov_album = Album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, self)
-        self.seznam_naslovov.append(naslov)
+    def nov_album(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, st_vnosov=1):
+        self.preveri_album(izvajalec, naslov, opis)
+        nov_album = Album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, self, st_vnosov)
         self.seznam_izvajalcev.append(izvajalec)
         self._izvajalci_z_naslovi[(izvajalec, naslov)] = nov_album
         self._seznam_letnic.append(leto_izdaje) 
@@ -140,7 +143,7 @@ class Dnevnik:
         return cls.nalozi_iz_jsona(slovar_iz_json)
 
 class Album:
-    def __init__(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, dnevnik):        
+    def __init__(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, dnevnik, st_vnosov):        
         self.naslov = naslov
         self.izvajalec = izvajalec
         self.datum = datum
@@ -149,6 +152,7 @@ class Album:
         self.ocena = ocena
         self.opis = opis
         self.dnevnik = dnevnik
+        self.st_vnosov = st_vnosov
 
     def __str__(self):
         return f'{self.izvajalec}: {self.naslov}, izdan leta {self.leto_izdaje}'
