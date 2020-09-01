@@ -47,6 +47,15 @@
                 "zvrst": "indie",
                 "ocena": 7,
                 "opis": "Zelo dobra spremljava ob učenju."
+            },
+            {
+                "naslov": "Teen Dream",
+                "izvajalec": "Beach House",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2010,
+                "zvrst": "pop",
+                "ocena": 8,
+                "opis": "bolje."
             }
         ]
     }

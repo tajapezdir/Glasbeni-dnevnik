@@ -112,10 +112,11 @@
             <ul>
                 <li>
                     <p>
-                        <b>{{album.izvajalec}}: {{album.naslov}} </b> ({{(album.datum)}}) - 
+                        <b>{{album.izvajalec}}: {{album.naslov}} </b> ({{(album.datum)}}) 
                         % if album.st_vnosov != 1:
-                        <b>{{album.st_vnosov}}</b> <br>
+                        <b> - {{album.st_vnosov}}</b> 
                         % end
+                        <br>
                         {{album.leto_izdaje}} - {{album.zvrst}} <br>
                         ocena: {{album.ocena}} / 10 <br>
                         opis: {{album.opis}}
