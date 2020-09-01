@@ -30,7 +30,7 @@
                             <div class="select">
                                 <select name='izvajalec'>
                                     <option disabled selected>izvajalcu</option>
-                                    % for izvajalec in dnevnik._seznam_izvajalcev:
+                                    % for izvajalec in set(dnevnik._seznam_izvajalcev):
                                     <option>{{izvajalec}}</option>
                                     % end
                                 </select>
@@ -43,7 +43,7 @@
                             <div class="select">
                                 <select name='zvrst'>
                                     <option disabled selected>zvrsti</option>
-                                    % for zvrst in dnevnik.poslusane_zvrsti:
+                                    % for zvrst in set(dnevnik.poslusane_zvrsti):
                                     <option>{{zvrst}}</option>
                                     % end
                                 </select>
@@ -113,6 +113,9 @@
                 <li>
                     <p>
                         <b>{{album.izvajalec}}: {{album.naslov}} </b> ({{(album.datum)}}) <br>
+                        % if album.st_vnosov != 1:
+                        {{album.st_vnosov}} <br>
+                        % end
                         {{album.leto_izdaje}} - {{album.zvrst}} <br>
                         ocena: {{album.ocena}} / 10 <br>
                         opis: {{album.opis}}

@@ -20,7 +20,7 @@ def _preveri_select(izbira):
     if izbira == None:
         raise ValueError('Morate izbrati eno izmed možnosti')
 
-pomozni_slovar = {} # v ta slovar bom pod ključem 'spremenljivka' shranjevala izvajalca/leto/zvrst        
+pomozni_slovar = {} # v ta slovar bom pod ključem 'spremenljivka' shranjevala izvajalca ali zvrst        
 
 # GET DEKORATORJI
 
@@ -40,7 +40,7 @@ def zacetna_stran():
 
 @bottle.get('/dnevnik-po-abecedi/')
 def dnevnik_po_abecedi():
-        return bottle.template(
+    return bottle.template(
         'glasbeni_dnevnik.html', 
         dnevnik=prvi_dnevnik, 
         zvrsti=seznam_zvrsti, 
@@ -50,7 +50,7 @@ def dnevnik_po_abecedi():
 
 @bottle.get('/dnevnik-po-letu/')
 def dnevnik_po_letu():
-        return bottle.template(
+    return bottle.template(
         'glasbeni_dnevnik.html', 
         dnevnik=prvi_dnevnik, 
         zvrsti=seznam_zvrsti, 
@@ -60,7 +60,9 @@ def dnevnik_po_letu():
 
 @bottle.get('/dnevnik-po-izvajalcu/')
 def dnevnik_po_izvajalcu():
-        return bottle.template(
+    if len(pomozni_slovar) == 0:
+        bottle.redirect('/')
+    return bottle.template(
         'glasbeni_dnevnik.html', 
         dnevnik=prvi_dnevnik, 
         zvrsti=seznam_zvrsti, 
@@ -70,7 +72,9 @@ def dnevnik_po_izvajalcu():
 
 @bottle.get('/dnevnik-po-zvrsti/')
 def dnevnik_po_zvrsti():
-        return bottle.template(
+    if len(pomozni_slovar) == 0:
+        bottle.redirect('/')
+    return bottle.template(
         'glasbeni_dnevnik.html', 
         dnevnik=prvi_dnevnik, 
         zvrsti=seznam_zvrsti, 
@@ -91,14 +95,14 @@ def info():
 @bottle.post('/dodaj-album/')
 def nov_album():
     _preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
-    _preveri_select(bottle.request.forms('zvrst'))
-    _preveri_select(bottle.request.forms('ocena'))
+    _preveri_select(bottle.request.forms['zvrst'])
+    _preveri_select(bottle.request.forms['ocena'])
     naslov = bottle.request.forms.getunicode('naslov')
     izvajalec = bottle.request.forms.getunicode('izvajalec')
     datum = date.today() 
     leto_izdaje = int(bottle.request.forms.getunicode('leto izdaje'))
-    zvrst = bottle.request.forms('zvrst')
-    ocena = int(bottle.request.forms('ocena'))
+    zvrst = bottle.request.forms['zvrst']
+    ocena = int(bottle.request.forms['ocena'])
     opis = bottle.request.forms.getunicode('opis')
     prvi_dnevnik.nov_album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis)
     bottle.redirect('/')

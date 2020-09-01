@@ -16,31 +16,28 @@ class Dnevnik:
         self._izvajalci_z_naslovi = {} # slovar oblike {(izvajalec, naslov): Album}
         self.poslusane_zvrsti = []
 
-    # def st_ponovljenih(self, izvajalec, naslov):
-    #     st = 0
-    #     for album in self.seznam_albumov:
-    #         if naslov in album.naslov:
-    #             if izvajalec == album.izvajalec:
-    #                 st += 1
-    #     return st 
+    def stevilo_ponovjenih(self,izvajalec, naslov):
+        album = self._izvajalci_z_naslovi[(izvajalec, naslov)]
+        return album.st_vnosov + 1
+
+    def stevilo_vnosov(self, izvajalec, naslov):
+        if (izvajalec, naslov) in self._izvajalci_z_naslovi:
+            return self.stevilo_ponovjenih(izvajalec, naslov)
+        else:
+            return 1
 
     def preveri_album(self, izvajalec, naslov, opis):
         if izvajalec == '' or naslov == '' or opis == '':
             raise ValueError(
                 f'Izpolniti morate vsa polja'
-            )     
-        elif (izvajalec, naslov) in self._izvajalci_z_naslovi:
-            # stevilo = self.st_ponovljenih(izvajalec, naslov)
-            raise ValueError(
-                f'Ta album ste že vnesli'
-            )
-        
+            )      
    
-    def nov_album(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, st_vnosov=1):
+    def nov_album(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis):
         self.preveri_album(izvajalec, naslov, opis)
-        nov_album = Album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, self, st_vnosov)
-        self._seznam_izvajalcev.append(izvajalec)
-        self._izvajalci_z_naslovi[(izvajalec, naslov)] = nov_album
+        st_vnosov = self.stevilo_vnosov(izvajalec.strip(), naslov.strip())
+        nov_album = Album(naslov.strip(), izvajalec.strip(), datum, leto_izdaje, zvrst, ocena, opis, self, st_vnosov)
+        self._seznam_izvajalcev.append(izvajalec.strip())
+        self._izvajalci_z_naslovi[(izvajalec.strip(), naslov.strip())] = nov_album
         self._seznam_letnic.append(leto_izdaje) 
         self.seznam_albumov.append(nov_album)
         self.poslusane_zvrsti.append(zvrst)
@@ -59,8 +56,7 @@ class Dnevnik:
         for ocena, st in self._slovar_ocen.items():
             n += st
             vsota += ocena * st
-        return round(vsota / n, 1)
-                                        
+        return round(vsota / n, 1)                               
 
     def sortiraj_po_abecedi(self): # moram še izboljšati, zaenkrat sortira samo po imenih izvajalcev
         seznam_po_abecedi = []
@@ -99,9 +95,6 @@ class Dnevnik:
             if izvajalec.upper() == album.izvajalec.upper():
                 seznam_po_izvajalcu.append(album)
         return seznam_po_izvajalcu        
-
-    def izbrisi_album(self):
-        pass
 
     def slovar_v_json(self):
         return {
