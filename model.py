@@ -28,7 +28,7 @@ class Uporabnik:
     
     @classmethod
     def nalozi_stanje(cls, ime_datoteke):
-        with open(ime_datoteke) as datoteka:
+        with open(ime_datoteke, encoding='utf-8') as datoteka:
             slovar_stanja = json.load(datoteka)
         uporabnisko_ime = slovar_stanja['uporabnisko_ime']
         zasifrirano_geslo = slovar_stanja['zasifrirano_geslo']
