@@ -82,10 +82,6 @@ def dnevnik_po_zvrsti():
         albumi=prvi_dnevnik.sortiraj_po_zvrsti(pomozni_slovar['spremenljivka'])
     )
 
-@bottle.get('/analiza/')
-def analiza():
-    return bottle.template('analiza.html')
-
 @bottle.get('/info/')
 def info():
     return bottle.template('info.html')
