@@ -5,7 +5,35 @@ with open('glasbene-zvrsti.txt', encoding='UTF-8') as datoteka:
     for zvrst in datoteka:
         seznam_zvrsti.append(zvrst.strip())
 
-seznam_ocen = list(range(1, 11))    
+seznam_ocen = list(range(1, 11))
+
+class Uporabnik:
+    def __init__(self, uporabnisko_ime, zasifrirano_geslo, dnevnik):
+        self.uporabnisko_ime = uporabnisko_ime
+        self.zasifrirano_geslo = zasifrirano_geslo
+        self.dnevnik = dnevnik
+    
+    def preveri_geslo(self, zasifrirano_geslo):
+        if self.zasifrirano_geslo != zasifrirano_geslo:
+            raise ValueError('Napačno geslo! Poskusite znova.')
+    
+    def shrani_stanje(self, ime_datoteke):
+        slovar_stanja = {
+            'uporabnisko_ime': self.uporabnisko_ime,
+            'zasifrirano_geslo': self.zasifrirano_geslo,
+            'dnevnik': self.dnevnik.slovar_v_json()
+        }
+        with open(ime_datoteke, 'w', encoding='utf-8') as datoteka:
+            json.dump(slovar_stanja, datoteka, ensure_ascii=False, indent=4)
+    
+    @classmethod
+    def nalozi_stanje(cls, ime_datoteke):
+        with open(ime_datoteke) as datoteka:
+            slovar_stanja = json.load(datoteka)
+        uporabnisko_ime = slovar_stanja['uporabnisko_ime']
+        zasifrirano_geslo = slovar_stanja['zasifrirano_geslo']
+        dnevnik = Dnevnik.nalozi_iz_jsona(slovar_stanja['dnevnik'])
+        return cls(uporabnisko_ime, zasifrirano_geslo, dnevnik)
 
 class Dnevnik:
     def __init__(self):
@@ -53,10 +81,13 @@ class Dnevnik:
     def povprecna_ocena(self):
         vsota = 0
         n = 0
-        for ocena, st in self._slovar_ocen.items():
-            n += st
-            vsota += ocena * st
-        return round(vsota / n, 1)                               
+        if len(self._slovar_ocen) == 0:
+            return 0
+        else:
+            for ocena, st in self._slovar_ocen.items():
+                n += st
+                vsota += ocena * st
+            return round(vsota / n, 1)                               
 
     def sortiraj_po_abecedi(self): # moram še izboljšati, zaenkrat sortira samo po imenih izvajalcev
         seznam_po_abecedi = []

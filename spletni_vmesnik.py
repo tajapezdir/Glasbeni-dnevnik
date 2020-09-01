@@ -1,12 +1,38 @@
 import bottle
-from model import Dnevnik, seznam_zvrsti, seznam_ocen
-import json
+import random
+import os
+import hashlib
+from model import Uporabnik, Dnevnik, seznam_zvrsti, seznam_ocen
 
 from datetime import date
 
-JSONOVA_DATOTEKA = 'dnevnik.json'
+imenik_s_podatki = 'uporabniki'
+uporabniki = {}
+skrivnost = 'TO JE ENA HUDA SKRIVNOST'
 
-prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
+if not os.path.isdir(imenik_s_podatki):
+    os.mkdir(imenik_s_podatki)
+
+for ime_datoteke in os.listdir(imenik_s_podatki):
+    uporabnik = Uporabnik.nalozi_stanje(os.path.join(imenik_s_podatki, ime_datoteke))
+    uporabniki[uporabnik.uporabnisko_ime] = uporabnik
+
+def trenutni_uporabnik():
+    uporabnisko_ime = bottle.request.get_cookie('uporabnisko_ime', secret=skrivnost)
+    if uporabnisko_ime is None:
+        bottle.redirect('/prijava/')
+    return uporabniki[uporabnisko_ime]
+
+def dnevnik_uporabnika():
+    return trenutni_uporabnik().dnevnik
+
+def shrani_trenutnega_uporabnika():
+    uporabnik = trenutni_uporabnik()
+    uporabnik.shrani_stanje(os.path.join('uporabniki', f'{uporabnik.uporabnisko_ime}.json'))
+
+# JSONOVA_DATOTEKA = 'dnevnik.json'
+
+# prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
 
 # POMOŽNE FUNKCIJE 
 
@@ -24,62 +50,71 @@ pomozni_slovar = {} # v ta slovar bom pod ključem 'spremenljivka' shranjevala i
 
 # GET DEKORATORJI
 
+@bottle.get('/prijava/')
+def prijava_get():
+    return bottle.template('prijava.html')
+
 @bottle.get('/')
 def osnovna_stran():
     bottle.redirect('/dnevnik/')
 
 @bottle.get('/dnevnik/')
 def zacetna_stran():
+    dnevnik = dnevnik_uporabnika()
     return bottle.template(
         'glasbeni_dnevnik.html', 
-        dnevnik=prvi_dnevnik, 
+        dnevnik=dnevnik, 
         zvrsti=seznam_zvrsti, 
         ocene=seznam_ocen,
-        albumi=prvi_dnevnik.seznam_albumov[::-1]
+        albumi=dnevnik.seznam_albumov[::-1]
     )
 
 @bottle.get('/dnevnik-po-abecedi/')
 def dnevnik_po_abecedi():
+    dnevnik = dnevnik_uporabnika()
     return bottle.template(
         'glasbeni_dnevnik.html', 
-        dnevnik=prvi_dnevnik, 
+        dnevnik=dnevnik, 
         zvrsti=seznam_zvrsti, 
         ocene=seznam_ocen,
-        albumi=prvi_dnevnik.sortiraj_po_abecedi()
+        albumi=dnevnik.sortiraj_po_abecedi()
     )
 
 @bottle.get('/dnevnik-po-letu/')
 def dnevnik_po_letu():
+    dnevnik = dnevnik_uporabnika()
     return bottle.template(
         'glasbeni_dnevnik.html', 
-        dnevnik=prvi_dnevnik, 
+        dnevnik=dnevnik, 
         zvrsti=seznam_zvrsti, 
         ocene=seznam_ocen,
-        albumi=prvi_dnevnik.sortiraj_po_letu()
+        albumi=dnevnik.sortiraj_po_letu()
     )
 
 @bottle.get('/dnevnik-po-izvajalcu/')
 def dnevnik_po_izvajalcu():
+    dnevnik = dnevnik_uporabnika()
     if len(pomozni_slovar) == 0:
         bottle.redirect('/')
     return bottle.template(
         'glasbeni_dnevnik.html', 
-        dnevnik=prvi_dnevnik, 
+        dnevnik=dnevnik, 
         zvrsti=seznam_zvrsti, 
         ocene=seznam_ocen,
-        albumi=prvi_dnevnik.sortiraj_po_izvajalcu(pomozni_slovar['spremenljivka'])
+        albumi=dnevnik.sortiraj_po_izvajalcu(pomozni_slovar['spremenljivka'])
     )
 
 @bottle.get('/dnevnik-po-zvrsti/')
 def dnevnik_po_zvrsti():
+    dnevnik = dnevnik_uporabnika()
     if len(pomozni_slovar) == 0:
         bottle.redirect('/')
     return bottle.template(
         'glasbeni_dnevnik.html', 
-        dnevnik=prvi_dnevnik, 
+        dnevnik=dnevnik, 
         zvrsti=seznam_zvrsti, 
         ocene=seznam_ocen,
-        albumi=prvi_dnevnik.sortiraj_po_zvrsti(pomozni_slovar['spremenljivka'])
+        albumi=dnevnik.sortiraj_po_zvrsti(pomozni_slovar['spremenljivka'])
     )
 
 @bottle.get('/info/')
@@ -88,8 +123,34 @@ def info():
     
 # POST DEKORATORJI
 
+@bottle.post('/prijava/')
+def prijava_post():
+    uporabnisko_ime = bottle.request.forms.getunicode('uporabnisko_ime')
+    geslo = bottle.request.forms.getunicode('geslo')
+    h = hashlib.blake2b()
+    h.update(geslo.encode(encoding='utf-8'))
+    zasifrirano_geslo = h.hexdigest()
+    if 'nov_racun' in bottle.request.forms and uporabnisko_ime not in uporabniki:
+        uporabnik = Uporabnik(
+            uporabnisko_ime,
+            zasifrirano_geslo,
+            Dnevnik()
+        )
+        uporabniki[uporabnisko_ime] = uporabnik
+    else:
+        uporabnik = uporabniki[uporabnisko_ime]
+        uporabnik.preveri_geslo(zasifrirano_geslo)
+    bottle.response.set_cookie('uporabnisko_ime', uporabnik.uporabnisko_ime, path='/', secret=skrivnost)
+    bottle.redirect('/')
+
+@bottle.post('/odjava/')
+def odjava():
+    bottle.response.delete_cookie('uporabnisko_ime', path='/')
+    bottle.redirect('/')
+
 @bottle.post('/dodaj-album/')
 def nov_album():
+    dnevnik = dnevnik_uporabnika()
     _preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
     _preveri_select(bottle.request.forms['zvrst'])
     _preveri_select(bottle.request.forms['ocena'])
@@ -100,7 +161,8 @@ def nov_album():
     zvrst = bottle.request.forms['zvrst']
     ocena = int(bottle.request.forms['ocena'])
     opis = bottle.request.forms.getunicode('opis')
-    prvi_dnevnik.nov_album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis)
+    dnevnik.nov_album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis)
+    shrani_trenutnega_uporabnika()
     bottle.redirect('/')
 
 @bottle.post('/sortiraj-po-datumu/')
