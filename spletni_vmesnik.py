@@ -1,5 +1,5 @@
 import bottle
-from model import Dnevnik, seznam_zanrov, seznam_ocen
+from model import Dnevnik, seznam_zvrsti, seznam_ocen
 import json
 
 from datetime import date
@@ -8,14 +8,15 @@ JSONOVA_DATOTEKA = 'dnevnik.json'
 
 prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
 
-# POMOŽNE FUNKCIJE
+# POMOŽNE FUNKCIJE 
 
 def _preveri_leto_izdaje(niz):
     try:
         int(niz)
     except:
         raise ValueError(f'Pri letu izdaje morate vnesti število!')
-        
+
+pomozni_slovar = {} # v ta slovar bom pod ključem 'spremenljivka' shranjevala izvajalca/leto/zvrst        
 
 # GET DEKORATORJI
 
@@ -28,8 +29,49 @@ def zacetna_stran():
     return bottle.template(
         'glasbeni_dnevnik.html', 
         dnevnik=prvi_dnevnik, 
-        zvrsti=seznam_zanrov, 
-        ocene=seznam_ocen
+        zvrsti=seznam_zvrsti, 
+        ocene=seznam_ocen,
+        albumi=prvi_dnevnik.seznam_albumov[::-1]
+    )
+
+@bottle.get('/dnevnik-po-abecedi/')
+def dnevnik_po_abecedi():
+        return bottle.template(
+        'glasbeni_dnevnik.html', 
+        dnevnik=prvi_dnevnik, 
+        zvrsti=seznam_zvrsti, 
+        ocene=seznam_ocen,
+        albumi=prvi_dnevnik.sortiraj_po_abecedi()
+    )
+
+@bottle.get('/dnevnik-po-letu/')
+def dnevnik_po_letu():
+        return bottle.template(
+        'glasbeni_dnevnik.html', 
+        dnevnik=prvi_dnevnik, 
+        zvrsti=seznam_zvrsti, 
+        ocene=seznam_ocen,
+        albumi=prvi_dnevnik.sortiraj_po_letu()
+    )
+
+@bottle.get('/dnevnik-po-izvajalcu/')
+def dnevnik_po_izvajalcu():
+        return bottle.template(
+        'glasbeni_dnevnik.html', 
+        dnevnik=prvi_dnevnik, 
+        zvrsti=seznam_zvrsti, 
+        ocene=seznam_ocen,
+        albumi=prvi_dnevnik.sortiraj_po_izvajalcu(pomozni_slovar['spremenljivka'])
+    )
+
+@bottle.get('/dnevnik-po-zvrsti/')
+def dnevnik_po_zvrsti():
+        return bottle.template(
+        'glasbeni_dnevnik.html', 
+        dnevnik=prvi_dnevnik, 
+        zvrsti=seznam_zvrsti, 
+        ocene=seznam_ocen,
+        albumi=prvi_dnevnik.sortiraj_po_zvrsti(pomozni_slovar['spremenljivka'])
     )
 
 @bottle.get('/analiza/')
@@ -55,7 +97,28 @@ def nov_album():
     prvi_dnevnik.nov_album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis)
     bottle.redirect('/')
 
+@bottle.post('/sortiraj-po-datumu/')
+def po_datumu():
+    bottle.redirect('/')
 
+@bottle.post('/sortiraj-po-abecedi/')
+def po_abecedi():
+    bottle.redirect('/dnevnik-po-abecedi/')
 
+@bottle.post('/sortiraj-po-letu/')
+def po_letu():
+    bottle.redirect('/dnevnik-po-letu/')
+
+@bottle.post('/sortiraj-po-izvajalcu/')
+def po_izvajalcu():
+    izvajalec = bottle.request.forms.getunicode('izvajalec')
+    pomozni_slovar['spremenljivka'] = izvajalec
+    bottle.redirect('/dnevnik-po-izvajalcu/')
+
+@bottle.post('/sortiraj-po-zvrsti/')
+def po_zvrsti():
+    zvrst = bottle.request.forms.getunicode('zvrst')
+    pomozni_slovar['spremenljivka'] = zvrst
+    bottle.redirect('/dnevnik-po-zvrsti/')
 
 bottle.run(debug=True, reloader=True)

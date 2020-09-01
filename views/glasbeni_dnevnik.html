@@ -10,10 +10,45 @@
             </p>
             <div class="panel-block">
                 <ul class="menu-list">
-                    <li><a>datumu vnosa</a></li>
-                    <li><a>abecedi</a></li>
-                    <li><a>glasbeni zvrsti</a></li>
-                    <li><a>avtorju</a></li>
+                    <li>
+                        <form action="/sortiraj-po-datumu/" method="POST">
+                            <button class="button is-fullwidth"> datumu vnosa </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/sortiraj-po-abecedi/" method="POST">
+                            <button class="button is-fullwidth"> abecedi </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/sortiraj-po-letu/" method="POST">
+                            <button class="button is-fullwidth"> letu </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/sortiraj-po-izvajalcu/" method="POST">
+                            <div class="select">
+                                <select name='izvajalec'>
+                                    % for izvajalec in dnevnik._seznam_izvajalcev:
+                                    <option>{{izvajalec}}</option>
+                                    % end
+                                </select>
+                            </div>
+                            <input class="button" type="submit" value="izberi">
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/sortiraj-po-zvrsti/" method="POST">
+                            <div class="select">
+                                <select name='zvrst'>
+                                    % for zvrst in dnevnik.poslusane_zvrsti:
+                                    <option>{{zvrst}}</option>
+                                    % end
+                                </select>
+                            </div>
+                            <input class="button" type="submit" value="izberi">
+                        </form>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -48,13 +83,13 @@
                     <div class="field">
                         <label class="label">opis</label>
                         <div class="control">
-                          <textarea class="textarea" name="opis" placeholder="besedilo"></textarea>
+                            <textarea class="textarea" name="opis" placeholder="besedilo"></textarea>
                         </div>
-                      </div>
+                    </div>
 
                     <div class="field">
                         <div class="control">
-                          <button class="button is-link">nov album</button>
+                            <button class="button is-link">nov album</button>
                         </div>
                     </div>
                 </form>
@@ -70,7 +105,7 @@
                 <p> Povprečna ocena: {{dnevnik.povprecna_ocena()}} </p>
             </div>
         </div>
-        % for album in dnevnik.seznam_albumov[::-1] :
+        % for album in albumi:
         <div class="content has-background-white-ter">
             <ul>
                 <li>

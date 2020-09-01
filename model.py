@@ -1,21 +1,20 @@
 import json
 
-seznam_zanrov = []
+seznam_zvrsti = []
 with open('glasbene-zvrsti.txt', encoding='UTF-8') as datoteka:
     for zvrst in datoteka:
-        seznam_zanrov.append(zvrst.strip())
+        seznam_zvrsti.append(zvrst.strip())
 
-seznam_ocen = list(range(1, 11))
-
-    
+seznam_ocen = list(range(1, 11))    
 
 class Dnevnik:
     def __init__(self):
         self.seznam_albumov = []
-        self.seznam_izvajalcev = []
+        self._seznam_izvajalcev = []
         self._seznam_letnic = []
         self._slovar_ocen = {} #slovar oblike {ocena: stevilo albumov s to oceno}
         self._izvajalci_z_naslovi = {} # slovar oblike {(izvajalec, naslov): Album}
+        self.poslusane_zvrsti = []
 
     # def st_ponovljenih(self, izvajalec, naslov):
     #     st = 0
@@ -40,10 +39,11 @@ class Dnevnik:
     def nov_album(self, naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, st_vnosov=1):
         self.preveri_album(izvajalec, naslov, opis)
         nov_album = Album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis, self, st_vnosov)
-        self.seznam_izvajalcev.append(izvajalec)
+        self._seznam_izvajalcev.append(izvajalec)
         self._izvajalci_z_naslovi[(izvajalec, naslov)] = nov_album
         self._seznam_letnic.append(leto_izdaje) 
         self.seznam_albumov.append(nov_album)
+        self.poslusane_zvrsti.append(zvrst)
         self._slovar_ocen[ocena] = self._slovar_ocen.get(ocena, 0) + 1 
         return nov_album
     
@@ -66,38 +66,37 @@ class Dnevnik:
         seznam_po_abecedi = []
         if len(self.seznam_albumov) == 0:
             raise ValueError('Vnesli niste še nobenega albuma')        
-        for izvajalec in sorted(self.seznam_izvajalcev):
+        for izvajalec in sorted(self._seznam_izvajalcev):
             for album in self.seznam_albumov:
                 if izvajalec == album.izvajalec:
                     seznam_po_abecedi.append(album)
-        return seznam_po_abecedi
-            
+        return seznam_po_abecedi            
 
-    def sortiraj_po_letu_izdaje(self):
-        seznam_po_letnicah = []
+    def sortiraj_po_letu(self):
+        seznam_po_letih = []
         if len(self.seznam_albumov) == 0:
             raise ValueError('Vnesli niste še nobenega albuma')
         for letnica in sorted(self._seznam_letnic):
             for album in self.seznam_albumov:
                 if letnica == album.leto_izdaje:
-                    seznam_po_letnicah.append(album)
-        return seznam_po_letnicah
+                    seznam_po_letih.append(album)
+        return seznam_po_letih
 
-    def sortiraj_po_zanru(self, zvrst):
-        seznam_po_zanru = []
+    def sortiraj_po_zvrsti(self, zvrst):
+        seznam_po_zvrsti = []
         if len(self.seznam_albumov) == 0:
             raise ValueError('Vnesli niste še nobenega albuma')
         for album in self.seznam_albumov:
             if zvrst == album.zvrst:
-                seznam_po_zanru.append(album)
-        return seznam_po_zanru
+                seznam_po_zvrsti.append(album)
+        return seznam_po_zvrsti
 
     def sortiraj_po_izvajalcu(self, izvajalec):
         seznam_po_izvajalcu = []
         if len(self.seznam_albumov) == 0:
             raise ValueError('Vnesli niste še nobenega albuma')  
         for album in self.seznam_albumov:
-            if izvajalec == album.izvajalec:
+            if izvajalec.upper() == album.izvajalec.upper():
                 seznam_po_izvajalcu.append(album)
         return seznam_po_izvajalcu        
 
