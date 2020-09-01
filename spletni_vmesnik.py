@@ -16,6 +16,10 @@ def _preveri_leto_izdaje(niz):
     except:
         raise ValueError(f'Pri letu izdaje morate vnesti število!')
 
+def _preveri_select(izbira):
+    if izbira == None:
+        raise ValueError('Morate izbrati eno izmed možnosti')
+
 pomozni_slovar = {} # v ta slovar bom pod ključem 'spremenljivka' shranjevala izvajalca/leto/zvrst        
 
 # GET DEKORATORJI
@@ -87,12 +91,14 @@ def info():
 @bottle.post('/dodaj-album/')
 def nov_album():
     _preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
+    _preveri_select(bottle.request.forms('zvrst'))
+    _preveri_select(bottle.request.forms('ocena'))
     naslov = bottle.request.forms.getunicode('naslov')
     izvajalec = bottle.request.forms.getunicode('izvajalec')
     datum = date.today() 
     leto_izdaje = int(bottle.request.forms.getunicode('leto izdaje'))
-    zvrst = bottle.request.forms.getunicode('zvrst')
-    ocena = int(bottle.request.forms.getunicode('ocena'))
+    zvrst = bottle.request.forms('zvrst')
+    ocena = int(bottle.request.forms('ocena'))
     opis = bottle.request.forms.getunicode('opis')
     prvi_dnevnik.nov_album(naslov, izvajalec, datum, leto_izdaje, zvrst, ocena, opis)
     bottle.redirect('/')
@@ -112,12 +118,14 @@ def po_letu():
 @bottle.post('/sortiraj-po-izvajalcu/')
 def po_izvajalcu():
     izvajalec = bottle.request.forms.getunicode('izvajalec')
+    _preveri_select(izvajalec)
     pomozni_slovar['spremenljivka'] = izvajalec
     bottle.redirect('/dnevnik-po-izvajalcu/')
 
 @bottle.post('/sortiraj-po-zvrsti/')
 def po_zvrsti():
     zvrst = bottle.request.forms.getunicode('zvrst')
+    _preveri_select(zvrst)
     pomozni_slovar['spremenljivka'] = zvrst
     bottle.redirect('/dnevnik-po-zvrsti/')
 

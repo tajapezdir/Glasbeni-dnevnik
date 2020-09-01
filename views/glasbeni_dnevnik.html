@@ -29,6 +29,7 @@
                         <form action="/sortiraj-po-izvajalcu/" method="POST">
                             <div class="select">
                                 <select name='izvajalec'>
+                                    <option disabled selected>izvajalcu</option>
                                     % for izvajalec in dnevnik._seznam_izvajalcev:
                                     <option>{{izvajalec}}</option>
                                     % end
@@ -41,6 +42,7 @@
                         <form action="/sortiraj-po-zvrsti/" method="POST">
                             <div class="select">
                                 <select name='zvrst'>
+                                    <option disabled selected>zvrsti</option>
                                     % for zvrst in dnevnik.poslusane_zvrsti:
                                     <option>{{zvrst}}</option>
                                     % end
