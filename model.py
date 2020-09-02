@@ -38,11 +38,12 @@ class Uporabnik:
 class Dnevnik:
     def __init__(self):
         self.seznam_albumov = []
-        self._seznam_izvajalcev = []
+        self.seznam_izvajalcev = []
         self._seznam_letnic = []
+        self.poslusane_zvrsti = []
         self._slovar_ocen = {} #slovar oblike {ocena: stevilo albumov s to oceno}
         self._izvajalci_z_naslovi = {} # slovar oblike {(izvajalec, naslov): Album}
-        self.poslusane_zvrsti = []
+        
 
     def stevilo_ponovjenih(self,izvajalec, naslov):
         album = self._izvajalci_z_naslovi[(izvajalec, naslov)]
@@ -64,7 +65,7 @@ class Dnevnik:
         self.preveri_album(izvajalec, naslov, opis)
         st_vnosov = self.stevilo_vnosov(izvajalec.strip(), naslov.strip())
         nov_album = Album(naslov.strip(), izvajalec.strip(), datum, leto_izdaje, zvrst, ocena, opis, self, st_vnosov)
-        self._seznam_izvajalcev.append(izvajalec.strip())
+        self.seznam_izvajalcev.append(izvajalec.strip())
         self._izvajalci_z_naslovi[(izvajalec.strip(), naslov.strip())] = nov_album
         self._seznam_letnic.append(leto_izdaje) 
         self.seznam_albumov.append(nov_album)
@@ -89,11 +90,11 @@ class Dnevnik:
                 vsota += ocena * st
             return round(vsota / n, 1)                               
 
-    def sortiraj_po_abecedi(self): # moram še izboljšati, zaenkrat sortira samo po imenih izvajalcev
+    def sortiraj_po_abecedi(self): 
         seznam_po_abecedi = []
         if len(self.seznam_albumov) == 0:
             raise ValueError('Vnesli niste še nobenega albuma')        
-        for izvajalec in sorted(self._seznam_izvajalcev):
+        for izvajalec in sorted(self.seznam_izvajalcev):
             for album in self.seznam_albumov:
                 if izvajalec == album.izvajalec:
                     seznam_po_abecedi.append(album)
@@ -177,12 +178,10 @@ class Album:
         self.dnevnik = dnevnik
         self.st_vnosov = st_vnosov
 
-    def __str__(self):
-        return f'{self.izvajalec}: {self.naslov}, izdan leta {self.leto_izdaje}'
-
     def __lt__(self, other):
         if self.izvajalec == other.izvajalec:
             return self.naslov < other.naslov
-        else: self.izvajalec < other.izvajalec
+        else:
+            self.izvajalec < other.izvajalec
 
 

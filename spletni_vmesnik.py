@@ -1,5 +1,4 @@
 import bottle
-import random
 import os
 import hashlib
 from model import Uporabnik, Dnevnik, seznam_zvrsti, seznam_ocen
@@ -29,10 +28,6 @@ def dnevnik_uporabnika():
 def shrani_trenutnega_uporabnika():
     uporabnik = trenutni_uporabnik()
     uporabnik.shrani_stanje(os.path.join('uporabniki', f'{uporabnik.uporabnisko_ime}.json'))
-
-# JSONOVA_DATOTEKA = 'dnevnik.json'
-
-# prvi_dnevnik = Dnevnik.nalozi_stanje(JSONOVA_DATOTEKA)
 
 # POMOŽNE FUNKCIJE 
 
@@ -151,7 +146,7 @@ def odjava():
 @bottle.post('/dodaj-album/')
 def nov_album():
     dnevnik = dnevnik_uporabnika()
-    _preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
+    leto_izdaje =_preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
     _preveri_select(bottle.request.forms['zvrst'])
     _preveri_select(bottle.request.forms['ocena'])
     naslov = bottle.request.forms.getunicode('naslov')
