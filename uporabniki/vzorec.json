@@ -1,0 +1,80 @@
+{
+    "uporabnisko_ime": "vzorec",
+    "zasifrirano_geslo": "953f408db4d254120ac4fd92da8b5e07130c4cb8dfe240bd5757d1dfb286ccd04e67296d9f8642139c7b97beaf81fdd2e9fc33dc9cf20d4476108925439f02a6",
+    "dnevnik": {
+        "albumi": [
+            {
+                "naslov": "Red",
+                "izvajalec": "Taylor Swift",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2012,
+                "zvrst": "pop",
+                "ocena": 8,
+                "opis": "Verjetno najboljši album od Taylor Swift. Poln ljubezenskih balad in izjemen za v avto."
+            },
+            {
+                "naslov": "Folklore",
+                "izvajalec": "Taylor Swift",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2020,
+                "zvrst": "pop",
+                "ocena": 7,
+                "opis": "Album, ki je izšel med karanteno, vendar pa ima učinek pobega iz karantene."
+            },
+            {
+                "naslov": "Teen Dream",
+                "izvajalec": "Beach House",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2010,
+                "zvrst": "alternative",
+                "ocena": 8,
+                "opis": "Prvi Beach House album, ki sem ga poslušala. Zelo je umirjen, prijetno ga je poslušati med učenjem."
+            },
+            {
+                "naslov": "Teen Dream",
+                "izvajalec": "Beach House",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2010,
+                "zvrst": "alternative",
+                "ocena": 6,
+                "opis": "Hitro sem se ga naveličala, saj je nekoliko dolgočasen."
+            },
+            {
+                "naslov": "Remain in Light",
+                "izvajalec": "Talking Heads",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 1980,
+                "zvrst": "rock",
+                "ocena": 10,
+                "opis": "Zelo eksperimentalen album. Manj \"dancey\" kot njihovi prejšnji."
+            },
+            {
+                "naslov": "I Forget Where we were",
+                "izvajalec": "Ben Howard",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2014,
+                "zvrst": "folk",
+                "ocena": 10,
+                "opis": "Ob temu albumu vedno jokam. Najbolj udarno je sosledje pesmi: \"Evergreen\", \"End of the affair\" in \"Conrad\"."
+            },
+            {
+                "naslov": "Otis Blue/Otis Redding Sings Soul",
+                "izvajalec": "Otis Redding",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 1965,
+                "zvrst": "soul",
+                "ocena": 10,
+                "opis": "Na albumu je veliko priredb. Tiste, ki so originalne, pa so v kasnejših letih postale priredbe. Izstopa pesem Respect."
+            },
+            {
+                "naslov": "Stranger in the Alps",
+                "izvajalec": "Phoebe Bridgers",
+                "datum vnosa": "2020-09-02",
+                "leto izdaje": 2016,
+                "zvrst": "folk",
+                "ocena": 9,
+                "opis": "Bolj žalostna verzija Taylor Swift. Poudarek je na besedilu. Vsebinsko zelo iskren in povezan album."
+            }
+        ]
+    }
+}

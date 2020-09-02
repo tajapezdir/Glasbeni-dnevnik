@@ -13,7 +13,6 @@ from datetime import date
 #    |      \|     \| ||   ___| \  \// |     \| ||    ||     \        
 #    |______/|__/\____||______|  \__/  |__/\____||____||__|\__\       
                                                                      
-JSON_DATOTEKA = 'dnevnik.json'
 
 prvi_dnevnik = Dnevnik()
 
