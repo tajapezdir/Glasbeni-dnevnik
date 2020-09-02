@@ -146,13 +146,13 @@ def odjava():
 @bottle.post('/dodaj-album/')
 def nov_album():
     dnevnik = dnevnik_uporabnika()
-    leto_izdaje =_preveri_leto_izdaje(bottle.request.forms.getunicode('leto izdaje'))
+    leto_izdaje =_preveri_leto_izdaje(bottle.request.forms['leto izdaje'])
     _preveri_select(bottle.request.forms['zvrst'])
     _preveri_select(bottle.request.forms['ocena'])
     naslov = bottle.request.forms.getunicode('naslov')
     izvajalec = bottle.request.forms.getunicode('izvajalec')
     datum = date.today() 
-    leto_izdaje = int(bottle.request.forms.getunicode('leto izdaje'))
+    leto_izdaje = int(bottle.request.forms['leto izdaje'])
     zvrst = bottle.request.forms['zvrst']
     ocena = int(bottle.request.forms['ocena'])
     opis = bottle.request.forms.getunicode('opis')

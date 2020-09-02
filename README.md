@@ -8,4 +8,4 @@ Odločila sem se da napišem program, ki nam omogoča ravno to, da glasbo, ki na
 
 Ob prvem obisku programa, se je potrebno registrirati, ob nadaljnih obiskih pa naj se prijavi z istim uporabniškim imenom in geslom.
 
-Za ogled vzorčnega dnevnika, se prijavite z uporabniškim imenom "vzorec" in geslom "vzorec"
+Za ogled vzorčnega dnevnika, se prijavite z uporabniškim imenom "vzorec" in geslom "vzorec".
